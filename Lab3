@@ -1,0 +1,50 @@
+.data
+#Program Description: Output even numbers
+#Author: Austin Yono
+#Creation Date: 09/10/19
+header: .asciiz "How many even numbered integers would you like to add together?\n"
+sum: .asciiz "The sum of the numbers is: "
+
+.text
+main:
+
+li $v0, 4 #prints string
+la $a0, header #prints header
+syscall
+
+li $v0, 5 #get user input
+syscall
+
+add $t0, $0, $v0 #stores input into $t0
+
+addi $s0, $0, 0 #stores $s0 as 0
+addi $t1, $0, 2 #stores #t1 as 2
+
+loop: beq $t0, $0, last #moves to last
+
+	li $v0, 5 #gets user input to check 
+	syscall
+	
+	div $v0, $t1 #divides $v0 by 2
+	
+	mfhi $t2 #stores into $t2
+	
+	bne $t2, 0, addsum #if equal go to addsum
+	add $s0, $s0, $v0 #adds $s0 and $v0 to save as new $s0
+	
+	addi $t0, $t0, -1 #goes back into loop
+
+addsum: 
+	j loop #back to loop
+	
+last:
+
+	li $v0, 4 #prints string
+	la $a0, sum #prints string sum
+	syscall #ends print
+	li $v0, 1
+	add $a0, $s0, $0
+	syscall	#end
+
+li $v0, 10 #ends program
+syscall
